@@ -1,9 +1,10 @@
 <?php
 
 session_start();
-include './../config/koneksi.php';
-include './../services/domain.php';
-include './../services/helpers.php';
+include './../../services/domain.php';
+include './../../services/auth-nologin.php';
+include './../../services/helpers.php';
+include "./../../config/koneksi.php";
 
 if (isset($_GET['id'])) {
     $stmt = $conn->prepare('SELECT * FROM menu WHERE id=?');
@@ -32,7 +33,7 @@ $bestSellerMenus = $stmt->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mie Gokilll</title>
-    <link rel="stylesheet" href="./../src/css/style.css">
+    <link rel="stylesheet" href="./../../src/css/style.css">
     <link
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Inter:wght@400;500&amp;family=Space+Mono:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
       rel="stylesheet"
@@ -53,10 +54,10 @@ $bestSellerMenus = $stmt->get_result();
     <link href="https://cdn.boxicons.com/3.0.8/fonts/brands/boxicons-brands.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-    <?php include './../includes/guest/header.php' ?>
+    <?php include './../../includes/guest/header.php' ?>
 
     <section class="px-20 py-8 max-md:px-4 max-md:py-4">
-        <h1 class="text-3xl font-bricolage flex items-center gap-2 mb-4 italic"><a href="<?= $domain . 'menu/' ?>" class="flex items-center justify-center"><i class="bx bx-chevron-left"></i></a><span>Detail Menu</span></h1>
+        <h1 class="text-3xl font-bricolage flex items-center gap-2 mb-4 italic"><a href="<?= $domain . 'admin/menu' ?>" class="flex items-center justify-center"><i class="bx bx-chevron-left"></i></a><span>Detail Menu</span></h1>
 
         <div class="flex gap-6 max-md:flex-col">
 
@@ -79,14 +80,35 @@ $bestSellerMenus = $stmt->get_result();
                 <?php endif; ?>
                 <img
                     class="w-full h-full object-cover <?= $menu['tersedia'] === 0 ? 'grayscale' : '' ?>"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi2jYhjR0IvZgqNPCtUI4N2vLRvFUbre1ir4M3AtVSWLKvILY9SPmXK88DPrq82xs3dmRxa8ulCFrMg746TSPopGFht4D7VL5rhz1CYwuoVFn6pyHtgbFfALDTaLuiWi8eAGWseWCzcqilILrwCXhRrYZJPDBT2hlyLbP9m1Ul8N9nBRt4aJrVA4vEtw_edNgFdkXwmczqPUORfXgq06hNrPO-vNCphokQeebKCX40JZWAjit_FkeIjUPUg5ksB2rRbBItaKrBtqQ"
-                    alt="Pizza"
+                    src="<?= $domain . 'uploads/' . $menu['foto'] ?>"
+                    alt="<?= $menu['nama_menu'] ?>"
                 >
             </div>
 
             <!-- Detail -->
             <div class="flex-1 bg-gray-50 border-4 border-black p-6 shadow-[8px_8px_0px_#000]">
                 
+                <div class="flex gap-2 items-center mb-4 w-full justify-end">
+                    
+                    <a href="<?= $domain . 'admin/menu/edit.php?id=' . $menu['id'] ?>" class="flex items-center justify-center bg-white border-black border-2 p-1 w-fit h-fit">
+                        <i class="bx bx-edit"></i>
+                    </a>
+
+                    <form
+                        action="<?= $domain . 'admin/menu/hapus.php' ?>"
+                        method="POST"
+                        onsubmit="return confirm('Yakin ingin menghapus menu ini?')"
+                    >
+                        <input
+                            type="hidden"
+                            name="id"
+                            value="<?= $menu['id'] ?>"
+                        >
+
+                        <button type="submit" class="cursor-pointer flex items-center justify-center bg-white border-black border-2 p-1 w-fit h-fit"><i class="bx bx-trash"></i></button>
+                    </form>
+                </div>
+
                 <div class="flex max-md:flex-col justify-between items-start gap-4 max-md:gap-2">
                     <div class="space-y-3 max-md:space-y-2">
                         <?php if ($menu['terlaris'] === 1): ?>
@@ -131,6 +153,6 @@ $bestSellerMenus = $stmt->get_result();
         </div>
     </section>
 
-    <?php include './../includes/guest/footer.php' ?>
+    <?php include './../../includes/guest/footer.php' ?>
 </body>
 </html>

@@ -252,7 +252,7 @@ class LoadingBtn {
     }
 
     init() {
-        if (!this.btn || !this.text) return;
+        if (!this.form || !this.btn || !this.text) return;
         this.form.addEventListener('submit', () => this.startLoad())
     }
 
@@ -268,24 +268,20 @@ document.querySelectorAll('.form').forEach((el) => {
 	new LoadingBtn(el);
 });
 
-class Toast {
-    constructor() {
-        this.toast = document.getElementById('toast');
+document.addEventListener('DOMContentLoaded', () => {
+    const success = document.getElementById('toast-success');
+    const error = document.getElementById('toast-error');
 
-        this.init();
-    }
+    [success, error].forEach(toast => {
+        if (!toast) return;
 
-    init() {
-    	if (!this.toast) return;
         setTimeout(() => {
-        	this.toast.classList.remove('opacity-100', 'translate-y-0');
-            this.toast.classList.add('opacity-0', '-translate-y-20');
+            toast.classList.add(
+                'opacity-0',
+                'translate-x-10'
+            );
 
-            setTimeout(() => {
-                this.toast.remove();
-            }, 500);
+            setTimeout(() => toast.remove(), 300);
         }, 3000);
-    }
-}
-
-new Toast
+    });
+});
