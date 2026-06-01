@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 class="absolute -bottom-4 left-8 w-6 h-6 bg-gray-950 speech-bubble-tail"
             ></div>
         </div>
-        <div class="shadow-[8px_8px_0px_#000] bg-white border-6 space-y-8 border-black min-w-sm p-6">
+        <div class="shadow-[8px_8px_0px_#000] bg-white border-6 space-y-8 border-black sm:min-w-sm max-sm:w-9/10 p-6">
             <form action="<?= $domain . 'login.php'  ?>" method="POST" class="form">
                 <div class="space-y-6">
                     <div class="flex flex-col gap-2">

@@ -105,7 +105,7 @@ function cutText($text, $limit = 100)
                             <div class="relative opacity-50 grayscale">
                         <?php endif ?>
                                 <div class="w-full aspect-square overflow-hidden shrink-0">
-                                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi2jYhjR0IvZgqNPCtUI4N2vLRvFUbre1ir4M3AtVSWLKvILY9SPmXK88DPrq82xs3dmRxa8ulCFrMg746TSPopGFht4D7VL5rhz1CYwuoVFn6pyHtgbFfALDTaLuiWi8eAGWseWCzcqilILrwCXhRrYZJPDBT2hlyLbP9m1Ul8N9nBRt4aJrVA4vEtw_edNgFdkXwmczqPUORfXgq06hNrPO-vNCphokQeebKCX40JZWAjit_FkeIjUPUg5ksB2rRbBItaKrBtqQ" alt="">
+                                    <img class="w-full h-full object-cover" src="<?= $menu['foto'] ? $domain . 'uploads/' . $menu['foto'] : $domain . 'src/img/placeholder-image.png' ?>" alt="<?= $menu['nama_menu'] ?>">
                                 </div>
 
                                 <div class="p-2 space-y-4">

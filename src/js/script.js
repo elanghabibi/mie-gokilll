@@ -133,7 +133,7 @@ class PreviewImage {
 	}
 
 	init() {
-		if (!this.input || !this.preview || !this.placeholderText) return;
+		if (!this.input || !this.preview) return;
 		this.input.addEventListener('change', (e) => this.handlePreview(e))
 	}
 
@@ -144,6 +144,8 @@ class PreviewImage {
 		const url = URL.createObjectURL(file);
 		this.preview.src = url
 		this.preview.classList.remove('hidden')
+
+    if (!this.placeholderText) return;
 		this.placeholderText.classList.add('hidden')
 	}
 }
@@ -187,60 +189,74 @@ document.querySelectorAll('.show-password').forEach((el) => {
 	new ShowPassword(el);
 })
 
-class Sidebar {
-  constructor() {
-    this.btn = document.getElementById("sidebarBtn");
-    this.panel = document.getElementById("sidebar");
+// class Sidebar {
+//   constructor() {
+//     this.btn = document.getElementById("sidebarBtn");
+//     this.panel = document.getElementById("sidebar");
 
-    this.isOpen = false;
+//     this.isOpen = false;
 
-    this.init();
-  }
+//     this.init();
+//   }
 
-  init() {
-    if (!this.btn || !this.panel) return;
+//   init() {
+//     if (!this.btn || !this.panel) return;
 
-    this.btn.addEventListener("click", () => this.toggle());
-  }
+//     this.btn.addEventListener("click", () => this.toggle());
+//   }
 
-  toggle() {
-    this.isOpen ? this.hidden() : this.show();
-  }
+//   toggle() {
+//     this.isOpen ? this.hidden() : this.show();
+//   }
 
-  show() {
-    this.isOpen = true;
-    this.panel.classList.remove(
-      "max-md:opacity-0",
-      "max-md:pointer-events-none",
-      "max-md:-left-full"
-    );
-    this.panel.classList.add(
-      "max-md:opacity-100",
-      "max-md:pointer-events-auto",
-      "max-md:left-0"
-    );
+//   show() {
+//     this.isOpen = true;
+//     this.panel.classList.remove(
+//       "max-md:opacity-0",
+//       "max-md:pointer-events-none",
+//       "max-md:-left-full"
+//     );
+//     this.panel.classList.add(
+//       "max-md:opacity-100",
+//       "max-md:pointer-events-auto",
+//       "max-md:left-0"
+//     );
 
-    document.addEventListener("click", this.handleClickOutside);
-  }
+//     document.addEventListener("click", this.handleClickOutside);
+//   }
 
-  hidden() {
-    this.isOpen = false;
-    this.panel.classList.remove(
-      "max-md:opacity-100",
-      "max-md:pointer-events-auto",
-      "max-md:left-0"
-    );
-    this.panel.classList.add(
-      "max-md:opacity-0",
-      "max-md:pointer-events-none",
-      "max-md:-left-full"
-    );
+//   hidden() {
+//     this.isOpen = false;
+//     this.panel.classList.remove(
+//       "max-md:opacity-100",
+//       "max-md:pointer-events-auto",
+//       "max-md:left-0"
+//     );
+//     this.panel.classList.add(
+//       "max-md:opacity-0",
+//       "max-md:pointer-events-none",
+//       "max-md:-left-full"
+//     );
 
-    document.removeEventListener("click", this.handleClickOutside);
-  }
-}
+//     document.removeEventListener("click", this.handleClickOutside);
+//   }
+// }
 
-new Sidebar();
+// new Sidebar();
+
+const menuBtn = document.getElementById('menuBtn');
+const sidebar = document.getElementById('sidebar');
+const backdrop = document.getElementById('backdrop');
+
+menuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('-translate-x-full');
+    backdrop.classList.toggle('hidden');
+});
+
+backdrop.addEventListener('click', () => {
+    sidebar.classList.add('-translate-x-full');
+    backdrop.classList.add('hidden');
+});
 
 class LoadingBtn {
     constructor(form) {

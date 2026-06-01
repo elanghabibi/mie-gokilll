@@ -1,5 +1,5 @@
 <?php
 if (isset($_SESSION['isLogin'])) {
-    header('location: '.$domain);
+    header('location: '.$domain.'admin/dashboard');
 }
 ?>

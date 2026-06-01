@@ -54,105 +54,123 @@ $bestSellerMenus = $stmt->get_result();
     <link href="https://cdn.boxicons.com/3.0.8/fonts/brands/boxicons-brands.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-    <?php include './../../includes/guest/header.php' ?>
+<div
+    id="backdrop"
+    class="hidden fixed inset-0 bg-black/50 z-40 md:hidden"
+></div>
+<div class="flex h-screen">
 
-    <section class="px-20 py-8 max-md:px-4 max-md:py-4">
-        <h1 class="text-3xl font-bricolage flex items-center gap-2 mb-4 italic"><a href="<?= $domain . 'admin/menu' ?>" class="flex items-center justify-center"><i class="bx bx-chevron-left"></i></a><span>Detail Menu</span></h1>
+    <!-- SIDEBAR -->
+    <?php include './../../includes/admin/sidebar.php'; ?>
+    
 
-        <div class="flex gap-6 max-md:flex-col">
+    <!-- CONTENT -->
+    <div class="flex flex-col flex-1 h-screen min-w-0">
 
-            <!-- Gambar -->
-            <div class="relative w-96 max-md:w-full aspect-square shrink-0 overflow-hidden border-4 border-black shadow-[8px_8px_0px_#000]">
-                <?php if ($menu['tersedia'] === 0): ?>
-                    <!-- Sold Out Overlays -->
-                    <div
-                    class="absolute inset-0 z-30 sold-out-cross opacity-100 pointer-events-none"
-                    ></div>
-                    <div
-                    class="absolute inset-0 z-20 flex items-center justify-center rotate-[-12deg]"
-                    >
+        <!-- HEADER -->
+        <?php include './../../includes/admin/header.php'; ?>
+
+        <!-- SCROLLABLE MAIN -->
+        <main class="min-w-0 w-full flex-1 overflow-y-auto p-8 space-y-8 max-md:p-4 max-md:space-y-4">
+
+
+        <section class="">
+            <h1 class="text-3xl font-bricolage flex items-center gap-2 mb-4 italic"><a href="<?= $domain . 'admin/menu' ?>" class="flex items-center justify-center"><i class="bx bx-chevron-left"></i></a><span>Detail Menu</span></h1>
+
+            <div class="flex gap-6 max-md:flex-col">
+
+                <!-- Gambar -->
+                <div class="relative w-96 max-md:w-full aspect-square shrink-0 overflow-hidden border-4 border-black shadow-[8px_8px_0px_#000]">
+                    <?php if ($menu['tersedia'] === 0): ?>
+                        <!-- Sold Out Overlays -->
                         <div
-                            class="bg-red-600 text-white border-4 border-gray-950 font-black text-5xl px-8 py-2 uppercase tracking-tighter shadow-[8px_8px_0px_#000]"
+                        class="absolute inset-0 z-30 sold-out-cross opacity-100 pointer-events-none"
+                        ></div>
+                        <div
+                        class="absolute inset-0 z-20 flex items-center justify-center rotate-[-12deg]"
                         >
-                            HABIS!
+                            <div
+                                class="bg-red-600 text-white border-4 border-gray-950 font-black text-5xl px-8 py-2 uppercase tracking-tighter shadow-[8px_8px_0px_#000]"
+                            >
+                                HABIS!
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <img
+                        class="w-full h-full object-cover <?= $menu['tersedia'] === 0 ? 'grayscale' : '' ?>"
+                        src="<?= $menu['foto'] ? $domain . 'uploads/' . $menu['foto'] : $domain . 'src/img/placeholder-image.png' ?>"
+                        alt="<?= $menu['nama_menu'] ?>"
+                    >
+                </div>
+
+                <!-- Detail -->
+                <div class="flex-1 bg-gray-50 border-4 border-black p-6 shadow-[8px_8px_0px_#000]">
+                    
+                    <div class="flex gap-2 items-center mb-4 w-full justify-start">
+                        
+                        <a href="<?= $domain . 'admin/menu/edit.php?id=' . $menu['id'] ?>" class="flex items-center justify-center bg-white border-black border-2 p-1 w-fit h-fit">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <form
+                            action="<?= $domain . 'admin/menu/hapus.php' ?>"
+                            method="POST"
+                            onsubmit="return confirm('Yakin ingin menghapus menu ini?')"
+                        >
+                            <input
+                                type="hidden"
+                                name="id"
+                                value="<?= $menu['id'] ?>"
+                            >
+
+                            <button type="submit" class="cursor-pointer flex items-center justify-center bg-white border-black border-2 p-1 w-fit h-fit"><i class="bx bx-trash"></i></button>
+                        </form>
+                    </div>
+
+                    <div class="flex max-md:flex-col justify-between items-start gap-4 max-md:gap-2">
+                        <div class="space-y-3 max-md:space-y-2">
+                            <?php if ($menu['terlaris'] === 1): ?>
+                                <span class="inline-block px-3 py-1 text-xs font-bold border-2 border-black bg-yellow-300">
+                                    BEST SELLER
+                                </span>
+                            <?php endif ?>
+
+                            <h1 class="text-4xl font-black font-bricolage">
+                                <?= $menu['nama_menu'] ?>
+                            </h1>
+
+                            <p class="text-gray-600">
+                                Kategori: <?= ucfirst($menu['kategori']) ?>
+                            </p>
+                        </div>
+
+                        <div class="text-right max-md:text-left">
+                            <p class="text-3xl font-black font-space-mono">
+                                Rp<?= number_format($menu['harga'], 0, ',', '.') ?>
+                            </p>
+                            <p class="text-sm <?= $menu['tersedia'] === 1 ? 'text-green-600' : 'text-red-600' ?> font-medium">
+                                <?= $menu['tersedia'] === 1 ? 'Tersedia' : 'Habis' ?>
+                            </p>
                         </div>
                     </div>
-                <?php endif; ?>
-                <img
-                    class="w-full h-full object-cover <?= $menu['tersedia'] === 0 ? 'grayscale' : '' ?>"
-                    src="<?= $domain . 'uploads/' . $menu['foto'] ?>"
-                    alt="<?= $menu['nama_menu'] ?>"
-                >
-            </div>
 
-            <!-- Detail -->
-            <div class="flex-1 bg-gray-50 border-4 border-black p-6 shadow-[8px_8px_0px_#000]">
-                
-                <div class="flex gap-2 items-center mb-4 w-full justify-end">
-                    
-                    <a href="<?= $domain . 'admin/menu/edit.php?id=' . $menu['id'] ?>" class="flex items-center justify-center bg-white border-black border-2 p-1 w-fit h-fit">
-                        <i class="bx bx-edit"></i>
-                    </a>
+                    <!-- NANTI TOLONG BIKIN ADMIN DASHBOARD -->
 
-                    <form
-                        action="<?= $domain . 'admin/menu/hapus.php' ?>"
-                        method="POST"
-                        onsubmit="return confirm('Yakin ingin menghapus menu ini?')"
-                    >
-                        <input
-                            type="hidden"
-                            name="id"
-                            value="<?= $menu['id'] ?>"
-                        >
+                    <div class="mt-6">
+                        <h2 class="font-bold text-lg">
+                            Deskripsi
+                        </h2>
 
-                        <button type="submit" class="cursor-pointer flex items-center justify-center bg-white border-black border-2 p-1 w-fit h-fit"><i class="bx bx-trash"></i></button>
-                    </form>
-                </div>
-
-                <div class="flex max-md:flex-col justify-between items-start gap-4 max-md:gap-2">
-                    <div class="space-y-3 max-md:space-y-2">
-                        <?php if ($menu['terlaris'] === 1): ?>
-                            <span class="inline-block px-3 py-1 text-xs font-bold border-2 border-black bg-yellow-300">
-                                BEST SELLER
-                            </span>
-                        <?php endif ?>
-
-                        <h1 class="text-4xl font-black font-bricolage">
-                            <?= $menu['nama_menu'] ?>
-                        </h1>
-
-                        <p class="text-gray-600">
-                            Kategori: <?= ucfirst($menu['kategori']) ?>
+                        <p class="mt-2 text-gray-700 leading-relaxed">
+                            <?= $menu['deskripsi'] ?>
                         </p>
                     </div>
 
-                    <div class="text-right max-md:text-left">
-                        <p class="text-3xl font-black font-space-mono">
-                            Rp<?= number_format($menu['harga'], 0, ',', '.') ?>
-                        </p>
-                        <p class="text-sm <?= $menu['tersedia'] === 1 ? 'text-green-600' : 'text-red-600' ?> font-medium">
-                            <?= $menu['tersedia'] === 1 ? 'Tersedia' : 'Habis' ?>
-                        </p>
-                    </div>
-                </div>
-
-                <!-- NANTI TOLONG BIKIN ADMIN DASHBOARD -->
-
-                <div class="mt-6">
-                    <h2 class="font-bold text-lg">
-                        Deskripsi
-                    </h2>
-
-                    <p class="mt-2 text-gray-700 leading-relaxed">
-                        <?= $menu['deskripsi'] ?>
-                    </p>
                 </div>
 
             </div>
-
-        </div>
-    </section>
-
-    <?php include './../../includes/guest/footer.php' ?>
+        </section>
+    </main>
 </body>
+<script src="./../../src/js/script.js"></script>
 </html>

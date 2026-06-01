@@ -79,8 +79,8 @@ $bestSellerMenus = $stmt->get_result();
                 <?php endif; ?>
                 <img
                     class="w-full h-full object-cover <?= $menu['tersedia'] === 0 ? 'grayscale' : '' ?>"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi2jYhjR0IvZgqNPCtUI4N2vLRvFUbre1ir4M3AtVSWLKvILY9SPmXK88DPrq82xs3dmRxa8ulCFrMg746TSPopGFht4D7VL5rhz1CYwuoVFn6pyHtgbFfALDTaLuiWi8eAGWseWCzcqilILrwCXhRrYZJPDBT2hlyLbP9m1Ul8N9nBRt4aJrVA4vEtw_edNgFdkXwmczqPUORfXgq06hNrPO-vNCphokQeebKCX40JZWAjit_FkeIjUPUg5ksB2rRbBItaKrBtqQ"
-                    alt="Pizza"
+                    src="<?= $menu['foto'] ? $domain . 'uploads/' . $menu['foto'] : $domain . 'src/img/placeholder-image.png' ?>"
+                    alt="<?= $menu['nama_menu'] ?>"
                 >
             </div>
 
