@@ -20,12 +20,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (password_verify($password, $user['password'])) {
             $_SESSION['idUser'] = $user['id'];
             $_SESSION['username'] = $user['username'];
+            $_SESSION['nama_lengkap'] = $user['nama_lengkap'];
+            $_SESSION['role'] = $user['role'];
             $_SESSION['isLogin'] = true;
 
             toast('success', 'Login berhasil!');
 
-            header('location: ' . $domain . 'admin/dashboard');
-            exit;
+            if ($_SESSION['role'] == 'admin') {
+                header('location: '.$domain.'admin/dashboard');
+                exit;
+            } else if ($_SESSION['role'] == 'petugas') {
+                header('location: '.$domain.'petugas/dashboard');
+                exit;
+            } else {
+                header('location: '.$domain);
+                exit;
+            }
         } else {
             toast('error', 'Username atau password salah!');
 

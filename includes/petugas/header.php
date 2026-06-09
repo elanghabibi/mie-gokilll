@@ -11,7 +11,7 @@
         </button>
 
         <h2 class="font-bricolage text-3xl max-md:text-xl font-black">
-            Dashboard Admin
+            Dashboard Petugas
         </h2>
 
     </div>

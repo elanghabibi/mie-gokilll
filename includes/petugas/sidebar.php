@@ -23,7 +23,7 @@
     <nav class="flex-1 p-4 space-y-4">
 
         <a
-            href="<?= $domain . 'admin/dashboard' ?>"
+            href="<?= $domain . 'petugas/dashboard' ?>"
             class="block p-4 border-4 border-black bg-white shadow-[6px_6px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
         >
             <div class="flex items-center gap-3">
@@ -35,25 +35,25 @@
         </a>
 
         <a
-            href="<?= $domain . 'admin/petugas' ?>"
+            href="<?= $domain . 'petugas/pesanan' ?>"
             class="block p-4 border-4 border-black bg-white shadow-[6px_6px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
         >
             <div class="flex items-center gap-3">
-                <i class="bx bx-user text-2xl"></i>
+                <i class="bx bx-receipt text-2xl"></i>
                 <span class="font-space-mono font-bold">
-                    Kelola User
+                    Data Pesanan
                 </span>
             </div>
         </a>
 
         <a
-            href="<?= $domain . 'admin/menu' ?>"
+            href="<?= $domain . 'petugas/pesanan/proses-pesanan.php' ?>"
             class="block p-4 border-4 border-black bg-white shadow-[6px_6px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
         >
             <div class="flex items-center gap-3">
-                <i class="bx bx-food-menu text-2xl"></i>
+                <i class="bx bx-check text-2xl"></i>
                 <span class="font-space-mono font-bold">
-                    Kelola Menu
+                    Pesanan Masuk
                 </span>
             </div>
         </a>

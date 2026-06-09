@@ -2,7 +2,7 @@
 session_start();
 
 include './../../services/domain.php';
-include './../../services/auth-nologin.php';
+include './../../services/middleware/admin.php';
 include './../../services/helpers.php';
 include "./../../config/koneksi.php";
 
@@ -132,7 +132,7 @@ $newMenus = $stmt->get_result();
             <section class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_#000]">
 
                 <h2 class="font-bricolage text-4xl font-black">
-                    Halo <?= ucfirst($_SESSION['username']) ?>!
+                    Halo <?= ucfirst(explode(' ', $_SESSION['nama_lengkap'])[0]) ?>!
                 </h2>
 
                 <p class="font-space-mono mt-2">

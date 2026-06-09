@@ -2,7 +2,7 @@
 
 session_start();
 include './../../services/domain.php';
-include './../../services/auth-nologin.php';
+include './../../services/middleware/admin.php';
 include './../../services/helpers.php';
 include "./../../config/koneksi.php";
 
@@ -153,8 +153,6 @@ $bestSellerMenus = $stmt->get_result();
                             </p>
                         </div>
                     </div>
-
-                    <!-- NANTI TOLONG BIKIN ADMIN DASHBOARD -->
 
                     <div class="mt-6">
                         <h2 class="font-bold text-lg">

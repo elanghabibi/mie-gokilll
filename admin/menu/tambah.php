@@ -2,7 +2,7 @@
 session_start();
 
 include './../../services/domain.php';
-include './../../services/auth-nologin.php';
+include './../../services/middleware/admin.php';
 include './../../services/helpers.php';
 include "./../../config/koneksi.php";
 
