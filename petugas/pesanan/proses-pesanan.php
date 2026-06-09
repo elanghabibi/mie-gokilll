@@ -10,7 +10,7 @@ include './../../services/helpers.php';
 $query = $conn->query("
     SELECT *
     FROM pesanan
-    WHERE status != 'selesai'
+    WHERE status NOT IN ('selesai', 'dibatalkan')
     ORDER BY created_at ASC
 ");
 ?>
@@ -62,7 +62,7 @@ $query = $conn->query("
         <main class="flex-1 overflow-y-auto p-8 space-y-8 max-md:p-4 max-md:space-y-4 min-w-0">
             
             <!-- INFO -->
-            <div class="grid grid-cols-3 max-md:grid-cols-2 gap-6 mb-8">
+            <div class="grid grid-cols-4 max-md:grid-cols-2 gap-6 mb-8">
 
                 <?php
 
@@ -82,6 +82,12 @@ $query = $conn->query("
                     SELECT COUNT(*) total
                     FROM pesanan
                     WHERE status='selesai'
+                ")->fetch_assoc()['total'];
+
+                $dibatalkan = $conn->query("
+                    SELECT COUNT(*) total
+                    FROM pesanan
+                    WHERE status='dibatalkan'
                 ")->fetch_assoc()['total'];
 
                 ?>
@@ -113,6 +119,16 @@ $query = $conn->query("
 
                     <p class="text-5xl font-black mt-2">
                         <?= $selesai ?>
+                    </p>
+                </div>
+
+                <div class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_#000]">
+                    <h3 class="font-black text-xl">
+                        DIBATALKAN
+                    </h3>
+
+                    <p class="text-5xl font-black mt-2">
+                        <?= $dibatalkan ?>
                     </p>
                 </div>
 
