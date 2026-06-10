@@ -7,12 +7,30 @@ include './../../services/middleware/petugas.php';
 include './../../services/helpers.php';
 
 // Ambil pesanan yang belum selesai
-$query = $conn->query("
-    SELECT *
-    FROM pesanan
-    WHERE status NOT IN ('selesai', 'dibatalkan')
-    ORDER BY created_at ASC
-");
+$statusFilter = $_GET['status'] ?? 'all';
+
+if ($statusFilter == 'all') {
+
+    $query = $conn->query("
+        SELECT *
+        FROM pesanan
+        ORDER BY created_at DESC
+    ");
+
+} else {
+
+    $stmt = $conn->prepare("
+        SELECT *
+        FROM pesanan
+        WHERE status = ?
+        ORDER BY created_at DESC
+    ");
+
+    $stmt->bind_param("s", $statusFilter);
+    $stmt->execute();
+
+    $query = $stmt->get_result();
+}
 ?>
 
 <!DOCTYPE html>
@@ -140,11 +158,64 @@ $query = $conn->query("
             >
 
                 <div
-                    class="border-b-4 border-black p-6"
+                    class="border-b-4 flex flex-col gap-4 border-black p-4"
                 >
                     <h2 class="text-3xl font-black font-[Bricolage_Grotesque]">
                         PESANAN MASUK
                     </h2>
+
+                    <div class="flex flex-wrap gap-3 mb-6">
+                        <a
+                            href="?status=all"
+                            class="border-4 border-black px-4 py-2 font-bricolage font-bold shadow-[4px_4px_0px_#000]
+                            <?= $statusFilter == 'all'
+                                ? 'bg-black text-white'
+                                : 'bg-white text-black' ?>"
+                        >
+                            Semua
+                        </a>
+
+                        <a
+                            href="?status=menunggu_konfirmasi"
+                            class="border-4 border-black px-4 py-2 font-bricolage font-bold shadow-[4px_4px_0px_#000]
+                            <?= $statusFilter == 'menunggu_konfirmasi'
+                                ? 'bg-yellow-300'
+                                : 'bg-white text-black' ?>"
+                        >
+                            Menunggu
+                        </a>
+
+                        <a
+                            href="?status=diproses"
+                            class="border-4 border-black px-4 py-2 font-bricolage font-bold shadow-[4px_4px_0px_#000]
+                            <?= $statusFilter == 'diproses'
+                                ? 'bg-blue-300'
+                                : 'bg-white text-black' ?>"
+                        >
+                            Diproses
+                        </a>
+
+                        <a
+                            href="?status=selesai"
+                            class="border-4 border-black px-4 py-2 font-bricolage font-bold shadow-[4px_4px_0px_#000]
+                            <?= $statusFilter == 'selesai'
+                                ? 'bg-green-300'
+                                : 'bg-white text-black' ?>"
+                        >
+                            Selesai
+                        </a>
+
+                        <a
+                            href="?status=dibatalkan"
+                            class="border-4 border-black px-4 py-2 font-bricolage font-bold shadow-[4px_4px_0px_#000]
+                            <?= $statusFilter == 'dibatalkan'
+                                ? 'bg-red-300'
+                                : 'bg-white text-black' ?>"
+                        >
+                            Dibatalkan
+                        </a>
+
+                    </div>
                 </div>
 
                 <div class="p-6">
@@ -184,6 +255,22 @@ $query = $conn->query("
                                                     DIPROSES
                                                 </span>
 
+                                            <?php elseif($pesanan['status'] == 'selesai'): ?>
+
+                                                <span
+                                                    class="px-2 py-1 border-2 border-black bg-green-300 text-xs font-bold"
+                                                >
+                                                    SELESAI
+                                                </span>
+
+                                            <?php elseif($pesanan['status'] == 'dibatalkan'): ?>
+
+                                                <span
+                                                    class="px-2 py-1 border-2 border-black bg-red-300 text-xs font-bold"
+                                                >
+                                                    DIBATALKAN
+                                                </span>
+
                                             <?php endif; ?>
 
                                         </div>
@@ -219,76 +306,86 @@ $query = $conn->query("
 
                                     </div>
 
-                                    <div
-                                        class="flex flex-wrap gap-2 items-start"
-                                    >
+                                    <div class="flex md:flex-col justify-between items-end">
+                                        <div
+                                            class="flex flex-wrap gap-2 items-start"
+                                        >
 
-                                        <?php if($pesanan['status'] == 'menunggu_konfirmasi'): ?>
+                                            <?php if($pesanan['status'] == 'menunggu_konfirmasi'): ?>
 
-                                            <a
-                                                href="konfirmasi.php?id=<?= $pesanan['id_pesanan'] ?>"
-                                                class="
-                                                px-4 py-2
-                                                bg-white
-                                                border-4 border-black
-                                                shadow-[4px_4px_0px_#000]
-                                                hover:translate-x-1
-                                                hover:translate-y-1
-                                                hover:shadow-none
-                                                transition-all
-                                                font-bold
-                                                "
-                                            >
-                                                KONFIRMASI
-                                            </a>
+                                                <a
+                                                    href="konfirmasi.php?id=<?= $pesanan['id_pesanan'] ?>"
+                                                    class="
+                                                    px-4 py-2
+                                                    bg-white
+                                                    border-4 border-black
+                                                    shadow-[4px_4px_0px_#000]
+                                                    hover:translate-x-1
+                                                    hover:translate-y-1
+                                                    hover:shadow-none
+                                                    transition-all
+                                                    font-bold
+                                                    "
+                                                >
+                                                    KONFIRMASI
+                                                </a>
 
-                                        <?php endif; ?>
+                                            <?php endif; ?>
 
-                                        <?php if($pesanan['status'] == 'diproses'): ?>
+                                            <?php if($pesanan['status'] == 'diproses'): ?>
 
-                                            <a
-                                                href="selesaikan.php?id=<?= $pesanan['id_pesanan'] ?>"
-                                                class="
-                                                px-4 py-2
-                                                bg-black
-                                                text-white
-                                                border-4 border-black
-                                                shadow-[4px_4px_0px_#000]
-                                                hover:translate-x-1
-                                                hover:translate-y-1
-                                                hover:shadow-none
-                                                transition-all
-                                                font-bold
-                                                "
-                                            >
-                                                SELESAIKAN
-                                            </a>
+                                                <a
+                                                    href="selesaikan.php?id=<?= $pesanan['id_pesanan'] ?>"
+                                                    class="
+                                                    px-4 py-2
+                                                    bg-black
+                                                    text-white
+                                                    border-4 border-black
+                                                    shadow-[4px_4px_0px_#000]
+                                                    hover:translate-x-1
+                                                    hover:translate-y-1
+                                                    hover:shadow-none
+                                                    transition-all
+                                                    font-bold
+                                                    "
+                                                >
+                                                    SELESAIKAN
+                                                </a>
 
-                                        <?php endif; ?>
+                                            <?php endif; ?>
 
-                                        <?php if($pesanan['status'] != 'selesai'): ?>
+                                            <?php if($pesanan['status'] != 'selesai' && $pesanan['status'] != 'dibatalkan'): ?>
 
-                                            <a
-                                                href="batalkan.php?id=<?= $pesanan['id_pesanan'] ?>"
-                                                onclick="return confirm('Batalkan pesanan ini?')"
-                                                class="
-                                                px-4 py-2
-                                                bg-white
-                                                border-4 border-black
-                                                shadow-[4px_4px_0px_#000]
-                                                hover:translate-x-1
-                                                hover:translate-y-1
-                                                hover:shadow-none
-                                                transition-all
-                                                font-bold
-                                                "
-                                            >
-                                                BATALKAN
-                                            </a>
+                                                <a
+                                                    href="batalkan.php?id=<?= $pesanan['id_pesanan'] ?>"
+                                                    onclick="return confirm('Batalkan pesanan ini?')"
+                                                    class="
+                                                    px-4 py-2
+                                                    bg-white
+                                                    border-4 border-black
+                                                    shadow-[4px_4px_0px_#000]
+                                                    hover:translate-x-1
+                                                    hover:translate-y-1
+                                                    hover:shadow-none
+                                                    transition-all
+                                                    font-bold
+                                                    "
+                                                >
+                                                    BATALKAN
+                                                </a>
 
-                                        <?php endif; ?>
+                                            <?php endif; ?>
 
+                                        </div>
+
+                                        <a
+                                            href="<?= $domain . 'petugas/pesanan/struk.php?id=' . $pesanan['id_pesanan'] ?>"
+                                            class="flex p-2 text-2xl bg-white border-4 border-black shadow-[4px_4px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all font-bold"
+                                        >
+                                            <i class="bx bx-info-circle"></i>
+                                        </a>
                                     </div>
+                                    
 
                                 </div>
 

@@ -142,37 +142,58 @@ $allPesanan = $stmt->get_result();
 
                 </div>
 
-                <div class="flex flex-wrap gap-2 mb-6">
+                <div class="flex flex-wrap gap-3 mb-6">
+                        <a
+                            href="?status=all"
+                            class="border-4 border-black px-4 py-2 font-bricolage font-bold shadow-[4px_4px_0px_#000]
+                            <?= $statusFilter == 'all'
+                                ? 'bg-black text-white'
+                                : 'bg-white text-black' ?>"
+                        >
+                            Semua
+                        </a>
 
-                    <a
-                        href="?status=all"
-                        class="px-3 py-2 border-2 border-black <?= $statusFilter == 'all' ? 'bg-black text-white' : 'bg-white' ?>"
-                    >
-                        Semua
-                    </a>
+                        <a
+                            href="?status=menunggu_konfirmasi"
+                            class="border-4 border-black px-4 py-2 font-bricolage font-bold shadow-[4px_4px_0px_#000]
+                            <?= $statusFilter == 'menunggu_konfirmasi'
+                                ? 'bg-yellow-300'
+                                : 'bg-white text-black' ?>"
+                        >
+                            Menunggu
+                        </a>
 
-                    <a
-                        href="?status=menunggu_konfirmasi"
-                        class="px-3 py-2 border-2 border-black <?= $statusFilter == 'menunggu_konfirmasi' ? 'bg-yellow-300' : 'bg-white' ?>"
-                    >
-                        Menunggu
-                    </a>
+                        <a
+                            href="?status=diproses"
+                            class="border-4 border-black px-4 py-2 font-bricolage font-bold shadow-[4px_4px_0px_#000]
+                            <?= $statusFilter == 'diproses'
+                                ? 'bg-blue-300'
+                                : 'bg-white text-black' ?>"
+                        >
+                            Diproses
+                        </a>
 
-                    <a
-                        href="?status=diproses"
-                        class="px-3 py-2 border-2 border-black <?= $statusFilter == 'diproses' ? 'bg-blue-300' : 'bg-white' ?>"
-                    >
-                        Diproses
-                    </a>
+                        <a
+                            href="?status=selesai"
+                            class="border-4 border-black px-4 py-2 font-bricolage font-bold shadow-[4px_4px_0px_#000]
+                            <?= $statusFilter == 'selesai'
+                                ? 'bg-green-300'
+                                : 'bg-white text-black' ?>"
+                        >
+                            Selesai
+                        </a>
 
-                    <a
-                        href="?status=selesai"
-                        class="px-3 py-2 border-2 border-black <?= $statusFilter == 'selesai' ? 'bg-green-300' : 'bg-white' ?>"
-                    >
-                        Selesai
-                    </a>
+                        <a
+                            href="?status=dibatalkan"
+                            class="border-4 border-black px-4 py-2 font-bricolage font-bold shadow-[4px_4px_0px_#000]
+                            <?= $statusFilter == 'dibatalkan'
+                                ? 'bg-red-300'
+                                : 'bg-white text-black' ?>"
+                        >
+                            Dibatalkan
+                        </a>
 
-                </div>
+                    </div>
 
                 <div class="w-full overflow-x-auto">
                     <table class="min-w-[900px] w-max text-sm text-left">

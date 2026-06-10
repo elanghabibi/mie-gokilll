@@ -5,80 +5,60 @@ include './../../services/domain.php';
 include './../../services/middleware/petugas.php';
 include './../../services/helpers.php';
 include "./../../config/koneksi.php";
+?>
 
+<?php
 
-// Statistik
-// Total Menu
-$result = $conn->query("
-    SELECT COUNT(*) as total
-    FROM menu
-");
-$totalMenu = $result->fetch_assoc()['total'];
+$menunggu = $conn->query("
+    SELECT COUNT(*) total
+    FROM pesanan
+    WHERE status='menunggu_konfirmasi'
+")->fetch_assoc()['total'];
 
+$diproses = $conn->query("
+    SELECT COUNT(*) total
+    FROM pesanan
+    WHERE status='diproses'
+")->fetch_assoc()['total'];
 
-// Total Makanan
-$result = $conn->query("
-    SELECT COUNT(*) as total
-    FROM menu
-    WHERE kategori='makanan'
-");
-$totalMakanan = $result->fetch_assoc()['total'];
+$selesai = $conn->query("
+    SELECT COUNT(*) total
+    FROM pesanan
+    WHERE status='selesai'
+")->fetch_assoc()['total'];
 
-
-// Total Minuman
-$result = $conn->query("
-    SELECT COUNT(*) as total
-    FROM menu
-    WHERE kategori='minuman'
-");
-$totalMinuman = $result->fetch_assoc()['total'];
-
-
-// Total Cemilan
-$result = $conn->query("
-    SELECT COUNT(*) as total
-    FROM menu
-    WHERE kategori='cemilan'
-");
-$totalCemilan = $result->fetch_assoc()['total'];
-
-
-// Total Best Seller
-$result = $conn->query("
-    SELECT COUNT(*) as total
-    FROM menu
-    WHERE terlaris=1
-");
-$totalBestSeller = $result->fetch_assoc()['total'];
+$dibatalkan = $conn->query("
+    SELECT COUNT(*) total
+    FROM pesanan
+    WHERE status='dibatalkan'
+")->fetch_assoc()['total'];
 
 ?>
 
 <?php 
-// Data Best Seller
 $stmt = $conn->prepare("
     SELECT *
-    FROM menu
-    WHERE terlaris=1
-    ORDER BY created_at DESC
+    FROM pesanan
+    WHERE status='menunggu_konfirmasi'
+    ORDER BY created_at ASC
     LIMIT 5
 ");
 
 $stmt->execute();
 
-$bestSellerMenus = $stmt->get_result();
+$newPesanan = $stmt->get_result();
 
+                               
+// $stmt = $conn->prepare("               
+//     SELECT *
+//     FROM pesanan                                               
+//     ORDER BY crea ted_at DESC
+//     LIMIT 5                                                                                                                       
+// ");           
 
+// $stmt->execute();
 
-$stmt = $conn->prepare("
-    SELECT *
-    FROM menu
-    ORDER BY created_at DESC
-    LIMIT 5
-");
-
-$stmt->execute();
-
-$newMenus = $stmt->get_result();
+// $newPesanan = $stmt->get_result();
 
 ?>
 
@@ -136,53 +116,57 @@ $newMenus = $stmt->get_result();
                 </h2>
 
                 <p class="font-space-mono mt-2">
-                    Kelola menu dan pantau performa Mie Gokilll dari sini.
+                    Kelola pesanan Mie Gokilll dari sini.
                 </p>
 
             </section>
 
             <!-- Statistik -->
-            <section class="grid grid-cols-4 max-md:grid-cols-2 gap-6">
+            <section class="flex flex-col gap-4">
+                <h2 class="text-4xl font-bold font-bricolage">STATISTIK PESANAN</h2>
 
-                <div class="bg-white border-4 border-black p-5 shadow-[8px_8px_0px_#000]">
-                    <p class="font-space-mono text-sm">
-                        TOTAL MENU
-                    </p>
-
-                    <h3 class="font-bricolage text-5xl font-black mt-2">
-                        <?= $totalMenu ?>
-                    </h3>
+                <div class="grid grid-cols-4 max-md:grid-cols-2 gap-6">
+                    <div class="bg-white border-4 border-black p-5 shadow-[8px_8px_0px_#000]">
+                        <p class="font-space-mono text-sm">
+                            MENUNGGU
+                        </p>
+    
+                        <h3 class="font-bricolage text-5xl font-black mt-2">
+                            <?= $menunggu ?>
+                        </h3>
+                    </div>
+    
+                    <div class="bg-white border-4 border-black p-5 shadow-[8px_8px_0px_#000]">
+                        <p class="font-space-mono text-sm">
+                            DIPROSES
+                        </p>
+    
+                        <h3 class="font-bricolage text-5xl font-black mt-2">
+                            <?= $diproses ?>
+                        </h3>
+                    </div>
+    
+                    <div class="bg-white border-4 border-black p-5 shadow-[8px_8px_0px_#000]">
+                        <p class="font-space-mono text-sm">
+                            SELESAI
+                        </p>
+    
+                        <h3 class="font-bricolage text-5xl font-black mt-2">
+                            <?= $selesai ?>
+                        </h3>
+                    </div>
+    
+                    <div class="bg-white border-4 border-black p-5 shadow-[8px_8px_0px_#000]">
+                        <p class="font-space-mono text-sm">
+                            DIBATALKAN
+                        </p>
+    
+                        <h3 class="font-bricolage text-5xl font-black mt-2">
+                            <?= $dibatalkan ?>
+                        </h3>
+                    </div>
                 </div>
 
-                <div class="bg-white border-4 border-black p-5 shadow-[8px_8px_0px_#000]">
-                    <p class="font-space-mono text-sm">
-                        MAKANAN
-                    </p>
-
-                    <h3 class="font-bricolage text-5xl font-black mt-2">
-                        <?= $totalMakanan ?>
-                    </h3>
-                </div>
-
-                <div class="bg-white border-4 border-black p-5 shadow-[8px_8px_0px_#000]">
-                    <p class="font-space-mono text-sm">
-                        MINUMAN
-                    </p>
-
-                    <h3 class="font-bricolage text-5xl font-black mt-2">
-                        <?= $totalMinuman ?>
-                    </h3>
-                </div>
-
-                <div class="bg-white border-4 border-black p-5 shadow-[8px_8px_0px_#000]">
-                    <p class="font-space-mono text-sm">
-                        BEST SELLER
-                    </p>
-
-                    <h3 class="font-bricolage text-5xl font-black mt-2">
-                        <?= $totalBestSeller ?>
-                    </h3>
-                </div>
 
             </section>
 
@@ -195,21 +179,27 @@ $newMenus = $stmt->get_result();
                     <div class="flex justify-between items-center mb-6">
 
                         <h3 class="font-bricolage text-3xl max-md:text-xl font-black">
-                            Pesanan Terbaru!
+                            Pesanan Masuk
                         </h3>
                     </div>
 
                     <div class="space-y-4">
 
-                        <?php while($menu = $bestSellerMenus->fetch_assoc()): ?>
-                        <div class="border-4 border-black p-4 flex justify-between">
-                            <span class="font-bricolage font-bold">
-                                <?= $menu['nama_menu'] ?>
-                            </span>
+                        <?php while($pesanan = $newPesanan->fetch_assoc()): ?>
+                        <div class="border-4 border-black p-4">
+                            <div class="flex justify-between">
+                                <span class="font-bricolage font-bold text-xl">
+                                    <?= $pesanan['nama_pelanggan'] ?>
+                                </span>
 
-                            <span class="font-space-mono">
-                                <?= formatHarga($menu['harga']) ?>
-                            </span>
+                                <span class="font-space-mono">
+                                    Meja <?= $pesanan['nomor_meja'] ?>
+                                </span>
+                            </div>
+
+                            <div class="mt-2 text-sm font-space-mono">
+                                <?= formatHarga($pesanan['total_harga']) ?>
+                            </div>
                         </div>
                         <?php endwhile;?>
                     </div>
@@ -225,111 +215,6 @@ $newMenus = $stmt->get_result();
 
             </section>
             
-            <!-- Tabel -->
-            <section class="max-md:mb-20 w-full bg-white border-4 border-black p-6 shadow-[8px_8px_0px_#000]">
-
-                <div class="flex justify-between items-center mb-6">
-
-                    <h3 class="font-bricolage text-3xl max-md:text-xl font-black">
-                        Menu Terbaru
-                    </h3>
-
-                    <a href="<?= $domain . 'admin/menu/tambah.php' ?>"
-                        class="px-4 py-2 bg-black text-white border-4 border-black shadow-[4px_4px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
-                    >
-                        <i class="bx bx-plus"></i>
-                    </a>
-
-                </div>
-
-                <div class="w-full overflow-x-auto">
-                    <table class="min-w-[900px] w-max text-sm text-left">
-
-                        <thead>
-
-                            <tr class="border-b-4 border-black">
-                                <th class="text-left py-4 px-4">Nama Menu</th>
-                                <th class="text-left py-4 px-4">Kategori</th>
-                                <th class="text-left py-4 px-4">Harga</th>
-                                <th class="text-left py-4 px-4">Status</th>
-                                <th class="text-left py-4 px-4">Aksi</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-                            <?php while($menu = $newMenus->fetch_assoc()): ?>
-
-                            <tr class="border-b-2 border-black">
-
-                                <td class="p-4">
-                                    <div class="flex items-center gap-2 h-fit">
-                                        <?= htmlspecialchars($menu['nama_menu']) ?>
-                                        <?php if ($menu['terlaris'] == 1): ?>
-                                            <span class="flex items-center"><i class="bxf bx-star text-yellow-500"></i></span>    
-                                        <?php endif ?>
-                                    </div>
-                                </td>
-
-                                <td class="p-4">
-                                    <?= ucfirst($menu['kategori']) ?>
-                                </td>
-
-                                <td class="p-4">
-                                    Rp<?= number_format($menu['harga'], 0, ',', '.') ?>
-                                </td>
-
-                                <td class="p-4">
-
-                                    <?php if($menu['tersedia']): ?>
-                                        <span class="px-2 py-1 border-2 border-black">
-                                            Tersedia
-                                        </span>
-                                    <?php else: ?>
-                                        <span class="px-2 py-1 bg-black text-white border-2 border-black">
-                                            Habis
-                                        </span>
-                                    <?php endif; ?>
-
-                                </td>
-
-                                <td class="p-4">
-                                    <div class="flex items-center gap-2">
-                                        <a href="<?= $domain . 'admin/menu/detail.php?id=' . $menu['id'] ?>" class="flex items-center justify-center bg-white border-black border-2 p-1 w-fit h-fit">
-                                            <i class="bx bx-info-circle"></i>
-                                        </a>
-    
-                                        <a href="<?= $domain . 'admin/menu/edit.php?id=' . $menu['id'] ?>" class="flex items-center justify-center bg-white border-black border-2 p-1 w-fit h-fit">
-                                            <i class="bx bx-edit"></i>
-                                        </a>
-    
-                                        <form
-                                            action="<?= $domain . 'admin/menu/hapus.php' ?>"
-                                            method="POST"
-                                            onsubmit="return confirm('Yakin ingin menghapus menu ini?')"
-                                        >
-                                            <input
-                                                type="hidden"
-                                                name="id"
-                                                value="<?= $menu['id'] ?>"
-                                            >
-    
-                                            <button type="submit" class="cursor-pointer flex items-center justify-center bg-white border-black border-2 p-1 w-fit h-fit"><i class="bx bx-trash"></i></button>
-                                        </form>
-                                    </div>
-                                </td>
-
-                            </tr>
-
-                            <?php endwhile; ?>
-
-                            </tbody>
-
-                    </table>
-                </div>
-
-            </section>
-
         </main>
 
     </div>

@@ -96,7 +96,7 @@ $bestSellerMenus = $stmt->get_result();
                             </div>
                         </div>
                     <?php endif; ?>
-                    <img
+                    <img   
                         class="w-full h-full object-cover <?= $menu['tersedia'] === 0 ? 'grayscale' : '' ?>"
                         src="<?= $menu['foto'] ? $domain . 'uploads/' . $menu['foto'] : $domain . 'src/img/placeholder-image.png' ?>"
                         alt="<?= $menu['nama_menu'] ?>"

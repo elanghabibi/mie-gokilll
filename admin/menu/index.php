@@ -104,7 +104,7 @@ $allMenus = $stmt->get_result();
                 </div>
 
                 <div class="w-full overflow-x-auto">
-                    <table class="min-w-[900px] w-max text-sm text-left">
+                    <table class="min-w-[900px] w-full text-sm text-left">
 
                         <thead>
 
